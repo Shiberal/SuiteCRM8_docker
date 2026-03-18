@@ -33,7 +33,7 @@ services:
   mysql_crm:
     image: mysql
     ports:
-      - "3306:3306"
+      - "3806:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=suitecrm
       - MYSQL_USER=suitecrm

@@ -28,6 +28,7 @@ RUN apt-get install -y php8.2-soap php8.2-ldap
 
 RUN a2enmod rewrite
 RUN a2enmod ssl
+RUN a2dismod mpm_event && a2enmod mpm_prefork
 RUN a2enconf php8.2-fpm
 
 RUN apt install -y php8.2-xml php8.2-mbstring

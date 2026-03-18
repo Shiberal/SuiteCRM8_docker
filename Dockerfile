@@ -55,6 +55,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 # Disable default site
 RUN a2dissite 000-default.conf
 
+# Copy config into image (no bind mounts required for Coolify/remote deploy)
+COPY docker/config/php/php.ini /etc/php/8.2/apache2/php.ini
+COPY docker/config/apache/apache2.conf /etc/apache2/apache2.conf
+COPY docker/config/apache/sites.conf /etc/apache2/sites-enabled/sites.conf
+# SSL certs are created at runtime by startup.sh if missing
+
 # Set up working directory and permissions
 WORKDIR /var/www/html/
 RUN chown -R www-data:www-data /var/www/html/ && \

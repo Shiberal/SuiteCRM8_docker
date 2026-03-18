@@ -10,13 +10,7 @@ services:
       # SuiteCRM logs (named volume)
       - suitecrm_logs:/var/www/html/SuiteCRM/logs
       - suitecrm_core_log:/var/www/html/SuiteCRM/public/legacy
-      # PHP config (bind mount for editing)
-      - ./docker/config/php/php.ini:/etc/php/8.2/apache2/php.ini
-      # APACHE config (bind mount for editing)
-      - ./docker/config/apache/apache2.conf:/etc/apache2/apache2.conf
-      - ./docker/config/apache/sites.conf:/etc/apache2/sites-enabled/sites.conf
-      - ./docker/config/apache/apache-selfsigned.crt:/etc/ssl/certs/apache-selfsigned.crt
-      - ./docker/config/apache/apache-selfsigned.key:/etc/ssl/private/apache-selfsigned.key
+      # PHP/Apache config and SSL certs are in the image; SSL created by startup.sh if needed
       # Apache log folder (named volume)
       - apache_logs:/var/log/apache2
       # PHP log folder (named volume)

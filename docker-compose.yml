@@ -5,22 +5,22 @@ services:
     networks:
       - suitecrm_net
     volumes:
-      #SuiteCRM Application Folder
-      - ./www:/var/www/html
-      #SuiteCRM Log Folder
-      - ./logs/SuiteCRM:/var/www/html/SuiteCRM/logs
-      - ./logs/SuiteCRM_Core/suitecrm.log:/var/www/html/SuiteCRM/public/legacy/suitecrm.log
-      #PHP config
+      # SuiteCRM application (named volume)
+      - suitecrm_www:/var/www/html
+      # SuiteCRM logs (named volume)
+      - suitecrm_logs:/var/www/html/SuiteCRM/logs
+      - suitecrm_core_log:/var/www/html/SuiteCRM/public/legacy
+      # PHP config (bind mount for editing)
       - ./docker/config/php/php.ini:/etc/php/8.2/apache2/php.ini
-      #APACHE config
+      # APACHE config (bind mount for editing)
       - ./docker/config/apache/apache2.conf:/etc/apache2/apache2.conf
       - ./docker/config/apache/sites.conf:/etc/apache2/sites-enabled/sites.conf
       - ./docker/config/apache/apache-selfsigned.crt:/etc/ssl/certs/apache-selfsigned.crt
       - ./docker/config/apache/apache-selfsigned.key:/etc/ssl/private/apache-selfsigned.key
-      #APACHE Log Folder
-      - ./logs/apache:/var/log/apache2/  
-      #PHP Log Folder
-      - ./logs/php:/var/log/php/
+      # Apache log folder (named volume)
+      - apache_logs:/var/log/apache2
+      # PHP log folder (named volume)
+      - php_logs:/var/log/php
     env_file:
       - environment/sample.env
     ports:
@@ -40,7 +40,7 @@ services:
       - MYSQL_PASSWORD=suitecrm
       - MYSQL_DATABASE=suitecrm
     volumes:
-      - ./docker/data/mysql:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     networks:
       - suitecrm_net
     restart: on-failure
@@ -59,5 +59,13 @@ services:
       - suitecrm_net
     restart: no
 networks:
-    suitecrm_net:
-        driver: bridge
+  suitecrm_net:
+    driver: bridge
+
+volumes:
+  suitecrm_www:
+  suitecrm_logs:
+  suitecrm_core_log:
+  apache_logs:
+  php_logs:
+  mysql_data:

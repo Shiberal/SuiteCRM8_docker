@@ -69,9 +69,9 @@ RUN chown -R www-data:www-data /var/www/html/ && \
 # Expose ports
 EXPOSE 80 443
 
-# Startup script and SITE_URL override script (for Coolify/reverse proxy)
+# Startup script and SITE_URL override (for Coolify/reverse proxy)
 COPY www/startup.sh /usr/local/bin/startup.sh
-COPY www/write_site_url_override.php /usr/local/bin/write_site_url_override.php
+COPY docker/write_site_url_override.php /usr/local/bin/write_site_url_override.php
 RUN chmod +x /usr/local/bin/startup.sh /usr/local/bin/write_site_url_override.php
 
 # Run from docroot so script relative paths (SuiteCRM/, .) work

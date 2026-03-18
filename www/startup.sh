@@ -24,6 +24,11 @@ fi
     chown -R www-data:www-data .
     echo "Permissions set"
 
+    # Apply SITE_URL from env (for Coolify/reverse proxy) so route checks and redirects use public URL
+    if [ -f /usr/local/bin/write_site_url_override.php ]; then
+      php /usr/local/bin/write_site_url_override.php
+    fi
+
       echo "starting Apache server"
      
       echo "$SUITEVERSION is now available @ http://localhost:8080 and https://localhost:8081"

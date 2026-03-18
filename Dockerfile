@@ -36,11 +36,10 @@ RUN apt-get install -y apache2 \
     zlib1g-dev libxml2-dev
 
 # Configure Apache Modules
-# 1. Disable mpm_event (default)
-# 2. Enable mpm_prefork (required for mod_php)
-# 3. Enable rewrite and ssl
+# 1. Disable mpm_event (default) and mpm_prefork in mods-enabled (mpm_prefork is loaded explicitly from mounted apache2.conf to avoid "No MPM loaded")
+# 2. Enable rewrite and ssl
 RUN a2dismod mpm_event && \
-    a2enmod mpm_prefork && \
+    a2dismod mpm_prefork && \
     a2enmod php8.2 && \
     a2enmod rewrite && \
     a2enmod ssl

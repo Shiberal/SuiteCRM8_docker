@@ -12,7 +12,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Update and install dependencies
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y software-properties-common ca-certificates apt-transport-https \
-    language-pack-en-base curl zip wget gnupg2 lsb-release
+    language-pack-en-base curl zip unzip wget gnupg2 lsb-release
 
 # Add PHP PPA
 RUN LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php -y
@@ -69,9 +69,9 @@ RUN chown -R www-data:www-data /var/www/html/ && \
 # Expose ports
 EXPOSE 80 443
 
-# Ensure startup.sh is executable (if it exists in your build context)
-# COPY startup.sh /usr/local/bin/startup.sh
-# RUN chmod +x /usr/local/bin/startup.sh
+# Startup script lives in image ( /var/www/html is a volume and may be empty )
+COPY www/startup.sh /usr/local/bin/startup.sh
+RUN chmod +x /usr/local/bin/startup.sh
 
-# Use the startup script to launch
-CMD ["/bin/bash", "startup.sh"]
+# Run from docroot so script relative paths (SuiteCRM/, .) work
+CMD ["/bin/bash", "-c", "cd /var/www/html && /usr/local/bin/startup.sh"]

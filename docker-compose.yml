@@ -5,8 +5,8 @@ services:
     networks:
       - suitecrm_net
     volumes:
-      # SuiteCRM application (named volume)
-      - suitecrm_www:/var/www/html
+      # SuiteCRM application (bind mount to host)
+      - ./www:/var/www/html # USE VOLUMES ON COOLIFY
       # SuiteCRM logs (named volume)
       - suitecrm_logs:/var/www/html/SuiteCRM/logs
       - suitecrm_core_log:/var/www/html/SuiteCRM/public/legacy
@@ -17,6 +17,8 @@ services:
       - php_logs:/var/log/php
     env_file:
       - environment/sample.env
+    environment:
+      - DATABASE_URL=mysql://${MYSQL_USER:-suitecrm}:${MYSQL_PASSWORD:-suitecrm}@mysql_crm:3306/${MYSQL_DATABASE:-suitecrm}
     ports:
       - "8085:80"
       - "8086:443"
@@ -29,10 +31,10 @@ services:
     ports:
       - "3806:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=suitecrm
-      - MYSQL_USER=suitecrm
-      - MYSQL_PASSWORD=suitecrm
-      - MYSQL_DATABASE=suitecrm
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-suitecrm}
+      - MYSQL_USER=${MYSQL_USER:-suitecrm}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-suitecrm}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-suitecrm}
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -47,8 +49,8 @@ services:
       - 8181:80
     environment:
       - PMA_HOST=mysql_crm
-      - PMA_USER=suitecrm
-      - PMA_PASSWORD=suitecrm
+      - PMA_USER=${MYSQL_USER:-suitecrm}
+      - PMA_PASSWORD=${MYSQL_PASSWORD:-suitecrm}
     networks:
       - suitecrm_net
     restart: no
@@ -57,7 +59,6 @@ networks:
     driver: bridge
 
 volumes:
-  suitecrm_www:
   suitecrm_logs:
   suitecrm_core_log:
   apache_logs:

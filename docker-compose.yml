@@ -22,7 +22,7 @@ services:
     ports:
       - "8085:80"
       - "8086:443"
-    restart: on-failure
+    restart: unless-stopped
     labels:
       - me.titmus.authors="jon@titmus.me"
 
@@ -39,7 +39,7 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - suitecrm_net
-    restart: on-failure
+    restart: unless-stopped
   
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

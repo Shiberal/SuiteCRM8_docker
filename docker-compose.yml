@@ -4,6 +4,8 @@ services:
     image: suitecrm:latest
     networks:
       - suitecrm_net
+    depends_on:
+      - mysql_crm
     volumes:
       # SuiteCRM application (bind mount to host)
       - ./www:/var/www/html # USE VOLUMES ON COOLIFY
